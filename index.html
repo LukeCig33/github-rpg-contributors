@@ -35,13 +35,8 @@
 <body>
   <div id="demo">
     <h1>Top Contributors</h1>
-    <!-- this is going to do whatever the tag's defaults are -->
-     <h2>Default</h2>
-    <rpg-contributors2></rpg-contributors2> 
-    <rpg-character seed="${item.login}">
-      
-    </rpg-character>
-
-  </div>
+    <github-rpg-contributors org="haxtheweb" repo="webcomponents" limit="10"></github-rpg-contributors>
+    <script type="module" src="./github-rpg-contributors.js"></script>
+    <rpg-character  seed="${item.login}"></rpg-character>
 </body>
 </html>

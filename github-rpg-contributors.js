@@ -23,8 +23,9 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
     super();
     this.title = "";
     this.items = [];
-    this.organization = "haxtheweb";
-    this.repository = "webcomponents";
+    this.org = '';
+    this.repo = '';
+    this.limit = 25;
     this.t = this.t || {};
     this.t = {
       ...this.t,
@@ -45,8 +46,9 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
       ...super.properties,
       title: { type: String },
       items: { type: Array },
-      organization: { type: String },
-      repository: { type: String },
+      org: { type: String },
+      repo: { type: String },
+      limit: { type: Number }
     };
   }
 
@@ -61,50 +63,55 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
         font-family: var(--ddd-font-navigation);
       }
       .wrapper {
-        display: inline-block;
         margin: var(--ddd-spacing-2);
         padding: var(--ddd-spacing-4);
       }
       h3 span {
         font-size: var(--github-rpg-contributors-label-font-size, var(--ddd-font-size-s));
       }
+      .rpg-wrapper {
+        display: inline-flex;
+      }
     `];
   }
+
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (changedProperties.has('org') || changedProperties.has('repo')){
+      this.getData();
+    }
+  }
+  getData() {
+    const url = `https://api.github.com/repos/${this.org}/${this.repo}/contributors`;
+    try {
+      fetch(url).then(d => d.ok ? d.json(): {}).then(data => {
+        if (data) {
+          this.items = [];
+          this.items = data;
+        }});
+    } catch (error) {
+      console.error("Eror");
+    }}
 
   // Lit render the HTML
   render() {
     return html`
-      <div class="results">
-        ${this.items.map((item, index) => html`
-          <div class="wrapper">
-            <h3>${item.login}</h3>
-            <rpg-character
-              seed="${item.login}"
-            ></rpg-character>
-            <slot></slot>
-          </div>
-          `)}
+  <div class="wrapper">
+    <h3>GitHub Repo: <a href="https://github.com/${this.org}/${this.repo}">${this.org}/${this.repo}</a></h3>
+    <slot></slot>
+    ${this.items.filter((item, index) => index < this.limit).map((item) => 
+        html`
+        <div class="rpg-wrapper">
+        <rpg-character  seed="${item.login}"></rpg-character>
+        <div class="contdetails">
+        ${item.login}
+        Contributions: ${item.contributions}
         </div>
-      </div>`;
+        </div>
+        `)}
+  </div>`;
   }
 
-      // life cycle will run when anything defined in `properties` is modified
-      updated(changedProperties) {
-        // see if value changes from user input and is not empty
-        if (changedProperties.has('organization')) {
-         this.updateResults();
-        }
-      }
-  
-      updateResults() {
-        fetch(`https://api.github.com/repos/${this.organization}/${this.repository}/contributors`).then(d => d.ok ? d.json(): {}).then(data => {
-          if (data) {
-            this.items = [];
-            this.items = data;
-            console.log(this.items);
-          } 
-        });
-      }
 
   /**
    * haxProperties integration via file reference
