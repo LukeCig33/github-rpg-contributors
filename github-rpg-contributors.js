@@ -84,7 +84,7 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
         margin-top: var(--ddd-spacing-2);
       }
       .name {
-        font-weight: bold;
+        font-weight: var(--ddd-font-weight-bold);
         font-size: var(--ddd-font-size-m);
         margin-bottom: var(--ddd-spacing-1);
       }
