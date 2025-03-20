@@ -9,7 +9,7 @@ import '@haxtheweb/rpg-character/rpg-character.js';
 
 /**
  * `github-rpg-contributors`
- * 
+ *
  * @demo index.html
  * @element github-rpg-contributors
  */
@@ -25,6 +25,7 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
     this.items = [];
     this.organization = "haxtheweb";
     this.repository = "webcomponents";
+    this.limit = 10;
     this.t = this.t || {};
     this.t = {
       ...this.t,
@@ -47,6 +48,7 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
       items: { type: Array },
       organization: { type: String },
       repository: { type: String },
+      limit: { type: Number },
     };
   }
 
@@ -80,7 +82,7 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
       <div class="wrapper">
         <h3>GitHub Repo: <a href="https://github.com/${this.org}/${this.repo}">${this.org}/${this.repo}</a></h3>
         <slot></slot>
-        ${this.items.filter((item, index) => index < 8).map((item) =>
+        ${this.items.filter((item, index) => index < this.limit).map((item) =>
             html`
             <div class="rpg-wrapper">
             <rpg-character  seed="${item.login}"></rpg-character>
