@@ -28,17 +28,24 @@
       background-color: var(--ddd-accent-2);
       color: var(--ddd-primary-17);
     }
+    rpg-character {
+      margin: var(--ddd-spacing-2);
+      border: var(--ddd-border-md);
+      border-radius: var(--ddd-radius-lg);
+    }
   </style>
 
   <title>github-rpg-contributors</title>
 </head>
 
 <body>
-  <div id="demo">
+  <div onclick="check()" id="demo">
     <h1>Top Contributors</h1>
     <github-rpg-contributors></github-rpg-contributors>
     </div>
     <script type="module" src="./github-rpg-contributors.js" limit="10"></script>
-
+    <script>function check(){
+      console.log("click")
+    }</script>
 </body>
 </html>

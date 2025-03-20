@@ -71,6 +71,27 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
       }
       .rpg-wrapper {
         display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: var(--ddd-spacing-4);
+      }
+      .rpg-wrapper:hover {
+        transform: scale(1.05);
+        border: 2px solid var(--ddd-theme-default-keystoneYellow);
+      }
+      .contdetails {
+        text-align: center;
+        margin-top: var(--ddd-spacing-2);
+      }
+      .name {
+        font-weight: bold;
+        font-size: var(--ddd-font-size-m);
+        margin-bottom: var(--ddd-spacing-1);
+      }
+      .contributions {
+        font-size: var(--ddd-font-size-s);
+        color: var(--ddd-theme-secondary);
+        margin-top: var(--ddd-spacing-1);
       }
     `];
   }
@@ -80,19 +101,22 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
     render() {
       return html`
       <div class="wrapper">
-        <h3>GitHub Repo: <a href="https://github.com/${this.org}/${this.repo}">${this.org}/${this.repo}</a></h3>
+        <h3>GitHub Repo: <a href="https://github.com/${this.org}/${this.repo}" target="_blank">${this.org}/${this.repo}</a></h3>
         <slot></slot>
         ${this.items.filter((item, index) => index < this.limit).map((item) =>
             html`
-            <div class="rpg-wrapper">
+            <div class="rpg-wrapper" @click="${() => this.openProfile(item.login)}">
             <rpg-character  seed="${item.login}"></rpg-character>
             <div class="contdetails">
-            ${item.login}
-            Contributions: ${item.contributions}
+            <div class="name">${item.login}</div>
+            <div class="contributions">Contributions: ${item.contributions}</div>
             </div>
             </div>
             `)}
       </div>`;
+    }
+    openProfile(login) {
+      window.open(`https://github.com/${login}`, '_blank');
     }
 
     updated(changedProperties) {
