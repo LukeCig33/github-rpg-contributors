@@ -23,9 +23,8 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
     super();
     this.title = "";
     this.items = [];
-    this.org = '';
-    this.repo = '';
-    this.limit = 25;
+    this.organization = "haxtheweb";
+    this.repository = "webcomponents";
     this.t = this.t || {};
     this.t = {
       ...this.t,
@@ -46,9 +45,8 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
       ...super.properties,
       title: { type: String },
       items: { type: Array },
-      org: { type: String },
-      repo: { type: String },
-      limit: { type: Number }
+      organization: { type: String },
+      repository: { type: String },
     };
   }
 
@@ -75,42 +73,47 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
     `];
   }
 
-  updated(changedProperties) {
-    super.updated(changedProperties);
-    if (changedProperties.has('org') || changedProperties.has('repo')){
-      this.getData();
+    // Lit render the HTML
+
+    render() {
+      return html`
+      <div class="wrapper">
+        <h3>GitHub Repo: <a href="https://github.com/${this.org}/${this.repo}">${this.org}/${this.repo}</a></h3>
+        <slot></slot>
+        ${this.items.filter((item, index) => index < 8).map((item) =>
+            html`
+            <div class="rpg-wrapper">
+            <rpg-character  seed="${item.login}"></rpg-character>
+            <div class="contdetails">
+            ${item.login}
+            Contributions: ${item.contributions}
+            </div>
+            </div>
+            `)}
+      </div>`;
     }
-  }
+
+    updated(changedProperties) {
+      super.updated(changedProperties);
+      // see if value changes from user input and is not empty
+      if (changedProperties.has('organization')) {
+        this.getData();
+      }
+    }
+
   getData() {
-    const url = `https://api.github.com/repos/${this.org}/${this.repo}/contributors`;
+    console.log("HI");
+    const url = `https://api.github.com/repos/${this.organization}/${this.repository}/contributors`;
     try {
       fetch(url).then(d => d.ok ? d.json(): {}).then(data => {
         if (data) {
           this.items = [];
           this.items = data;
+          console.log(this.items);
         }});
     } catch (error) {
-      console.error("Eror");
+      console.error("HI");
     }}
-
-  // Lit render the HTML
-  render() {
-    return html`
-  <div class="wrapper">
-    <h3>GitHub Repo: <a href="https://github.com/${this.org}/${this.repo}">${this.org}/${this.repo}</a></h3>
-    <slot></slot>
-    ${this.items.filter((item, index) => index < this.limit).map((item) => 
-        html`
-        <div class="rpg-wrapper">
-        <rpg-character  seed="${item.login}"></rpg-character>
-        <div class="contdetails">
-        ${item.login}
-        Contributions: ${item.contributions}
-        </div>
-        </div>
-        `)}
-  </div>`;
-  }
 
 
   /**

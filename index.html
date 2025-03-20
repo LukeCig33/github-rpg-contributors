@@ -29,14 +29,15 @@
       color: var(--ddd-primary-17);
     }
   </style>
+  
   <title>github-rpg-contributors</title>
 </head>
+<script type="module" src="./github-rpg-contributors.js"></script>
 
 <body>
   <div id="demo">
     <h1>Top Contributors</h1>
-    <github-rpg-contributors org="haxtheweb" repo="webcomponents" limit="10"></github-rpg-contributors>
-    <script type="module" src="./github-rpg-contributors.js"></script>
-    <rpg-character  seed="${item.login}"></rpg-character>
+    <github-rpg-contributors organization="haxtheweb" repository="webcomponents" ></github-rpg-contributors>
+
 </body>
 </html>
