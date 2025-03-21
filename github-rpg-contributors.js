@@ -23,8 +23,8 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
     super();
     this.title = "";
     this.items = [];
-    this.organization = "haxtheweb";
-    this.repository = "webcomponents";
+    this.organization = "";
+    this.repository = "";
     this.limit = 10;
     this.t = this.t || {};
     this.t = {
@@ -102,6 +102,7 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
       return html`
       <div class="wrapper">
         <h3>GitHub Repo: <a href="https://github.com/${this.org}/${this.repo}" target="_blank">${this.org}/${this.repo}</a></h3>
+        <p>Top contributors to the repository: <strong>${this.repository}</strong></p>
         <slot></slot>
         ${this.items.filter((item, index) => index < this.limit).map((item) =>
             html`
