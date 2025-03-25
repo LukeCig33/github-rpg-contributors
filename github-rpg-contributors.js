@@ -23,8 +23,8 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
     super();
     this.title = "";
     this.items = [];
-    this.organization = "";
-    this.repository = "";
+    this.org = "";
+    this.repo = "";
     this.limit = 10;
     this.t = this.t || {};
     this.t = {
@@ -46,8 +46,8 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
       ...super.properties,
       title: { type: String },
       items: { type: Array },
-      organization: { type: String },
-      repository: { type: String },
+      org: { type: String },
+      repo: { type: String },
       limit: { type: Number },
     };
   }
@@ -123,14 +123,14 @@ export class GithubRpgContributors extends DDDSuper(I18NMixin(LitElement)) {
     updated(changedProperties) {
       super.updated(changedProperties);
       // see if value changes from user input and is not empty
-      if (changedProperties.has('organization')) {
+      if (changedProperties.has('org')) {
         this.getData();
       }
     }
 
   getData() {
     console.log("HI");
-    const url = `https://api.github.com/repos/${this.organization}/${this.repository}/contributors`;
+    const url = `https://api.github.com/repos/${this.org}/${this.repo}/contributors`;
     try {
       fetch(url).then(d => d.ok ? d.json(): {}).then(data => {
         if (data) {
